@@ -1,0 +1,131 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo</title>
+    
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/index.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;700&display=swap">
+
+
+<style>
+
+.Todo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ffff00a9;
+  color: #fff;
+  border-radius: 10px;
+  margin: 10px 0;
+  padding: 15px 20px;
+  font-size: 20px;
+  font-weight: 400;
+}
+
+.todo-icons {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 20px;
+}
+
+.todo-icons i:hover {
+  color: #0ff;
+  cursor: pointer;
+}
+
+.todo-green {
+  background-color: #28a745; /* Green */
+}
+
+.todo-red {
+  background-color: #dc3545; /* Red */
+}
+
+.completed {
+  color: #c5aeff;
+  text-decoration: line-through;
+}
+
+.alert {
+    padding: 12px 20px;
+    margin: 10px 0;
+    border-radius: 5px;
+    font-weight: bold;
+}
+.alert-success { background-color: #d4edda; color: #155724; }
+.alert-error { background-color: #f8d7da; color: #721c24; }
+
+</style>
+
+</head>
+
+<body>
+    
+    <div class="signup-login">
+        <div>
+            <div>
+                <h1>Hello {{user}}</h1>
+            </div>
+            <div class="signup-box scr">
+                <div class="heads">
+                    <div class="ancaa" title=""><i class="fa-solid fa-user"></i> </div>           
+                    <div class="heading">Get Things Done?</div>
+                    <div class="anca">
+                        <a href="{% url 'logout' %}" class="sign">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </a>
+                    </div>
+                </div>
+                    <form action="" method="POST">
+                        {% csrf_token %}
+                        {% if messages %}
+                            {% for message in messages %}
+                                <div class="alert alert-{{ message.tags }} mt-2">
+                                    {{ message }}
+                                </div>
+                            {% endfor %}
+                        {% endif %}
+                        <input type="text" name="title" class="todo-input inp" placeholder="Enter your task here..." required>
+
+                        <input type="submit" class="submit-button" value="Add Task">
+                    </form>
+
+                    {% for todo in res %}
+                        <div class="Todo clickable-div {% if todo.status %}todo-green{% else %}todo-red{% endif %}">
+                            {% if todo.status %}
+                                <p class="completed">{{ todo.title }}</p>
+                            {% else %}
+                                <p>{{ todo.title }}</p>
+                            {% endif %}
+
+                            <div class="todo-icons">
+                                <a href="{% url 'edit_todo' todo.srno %}" title="Edit">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </a>
+                                <a href="{% url 'delete_todo' todo.srno %}" title="Delete">
+                                    <i class="fa-solid fa-trash"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="{% static 'js/todo.js' %}"></script>
+    <script src="https://kit.fontawesome.com/cb792c0850.js" crossorigin="anonymous"></script>
+
+</body>
+
+</html>
+
